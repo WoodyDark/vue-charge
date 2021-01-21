@@ -10,9 +10,9 @@
     },
     "keywords": [
         "vue",
-        "modal",
-        "dialog",
-        "component"
+        "renderless",
+        "state",
+        "headless"
     ],
     "main": "dist/vue-charge.ssr.js",
     "browser": "dist/vue-charge.esm.js",
