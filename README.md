@@ -114,18 +114,21 @@ If the `default` slot is used, the other slots will not be rendered.
 <template>
     <vc-async :promise="fetchCoffee" default="idle">
         <template v-slot:idle="{ execute }">
-            <button @click="execute">Get me Coffee!</button>
+            <button @click="execute">Show me cats!</button>
         </template>
 
         <template v-slot:pending>
             <div>Loading...</div>
         </template>
 
-        <template v-slot:resolved="{ execute, response: { data: cats } }">
+        <template v-slot:resolved="{ execute, response }">
             <div>
                 <button @click="execute">Retry</button>
-                <div v-for="cat in cats" :key="cat.id">
-                    <img :src="cat.url" />
+
+                <div v-if="response">
+                    <div v-for="cat in response.data" :key="cat.id">
+                        <img :src="cat.url" />
+                    </div>
                 </div>
             </div>
         </template>
@@ -227,4 +230,52 @@ If the `default` slot is used, the other slots will not be rendered.
         </template>
     </vc-resetable>
 </template>
+```
+
+# Extra Note
+
+By default all VueCharge only add functionalities to your components and does not add any wrapper HTMLElement to the DOM tree. You can imagine VueCharge components behaving like so:
+
+```html
+<template>
+    <slot></slot>
+</template>
+```
+
+For this reason, you still have to abide by Vue's convention of only pass in 1 root node. However, if you prefer that VueCharge components be rendered as part of the DOM tree, all components come with a `wrap` prop, which you can use to specify your desired HTML tag.
+
+**Default**
+
+```html
+<vc-resetable>
+    <div>My text</div>
+</vc-resetable>
+
+<!-- This will output -->
+<div>My text</div>
+```
+
+```html
+<vc-resetable>
+    <div>My text</div>
+    <div>More text</div>
+</vc-resetable>
+
+<!-- This will result in error -->
+```
+
+**With `wrap` prop**
+
+```html
+<!-- With wrap prop -->
+<vc-resetable wrap="div">
+    <div>My text</div>
+    <div>More text</div>
+</vc-resetable>
+
+<!-- This will output -->
+<div>
+    <div>My text</div>
+    <div>More text</div>
+</div>
 ```
