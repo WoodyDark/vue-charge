@@ -296,12 +296,17 @@ var __vue_component__$1 = /*#__PURE__*/normalizeComponent({}, __vue_inject_style
   },
   data: function data() {
     return {
-      key: 0
+      counter: 0
     };
   },
   methods: {
     reset: function reset() {
-      this.key++;
+      this.counter++;
+    }
+  },
+  computed: {
+    key: function key() {
+      return "vc-resetable-".concat(this._uid * 1000 + this.counter);
     }
   },
   render: function render(h) {
@@ -326,7 +331,7 @@ var __vue_inject_styles__$2 = undefined;
 var __vue_scope_id__$2 = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$2 = "data-v-e8d9fd12";
+var __vue_module_identifier__$2 = "data-v-30670aab";
 /* functional template */
 
 var __vue_is_functional_template__$2 = undefined;
@@ -336,7 +341,294 @@ var __vue_is_functional_template__$2 = undefined;
 
 /* style inject shadow dom */
 
-var __vue_component__$2 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, false, undefined, undefined, undefined);/* eslint-disable import/prefer-default-export */var components=/*#__PURE__*/Object.freeze({__proto__:null,VcAsync: __vue_component__,VcMultiScreen: __vue_component__$1,VcResetable: __vue_component__$2});var install = function installVueCharge(Vue) {
+var __vue_component__$2 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$2, __vue_script__$2, __vue_scope_id__$2, __vue_is_functional_template__$2, __vue_module_identifier__$2, false, undefined, undefined, undefined);var focusNext = function focusNext(focusables, currentIndex) {
+  if (focusables.length === 0) return -1;
+
+  if (currentIndex >= 0) {
+    if (currentIndex === focusables.length - 1) {
+      return 0;
+    } else {
+      return currentIndex + 1;
+    }
+  } else {
+    return 0;
+  }
+};
+var focusPrev = function focusPrev(focusables, currentIndex) {
+  if (focusables.length === 0) return -1;
+
+  if (currentIndex >= 0) {
+    if (currentIndex === 0) {
+      return focusables.length - 1;
+    } else {
+      return currentIndex - 1;
+    }
+  } else {
+    return focusables.length - 1;
+  }
+};//
+var script$3 = {
+  name: 'VcMenu',
+  props: {
+    tag: {
+      type: String,
+      default: 'div'
+    }
+  },
+  data: function data() {
+    return {
+      active: false,
+      focusables: [],
+      focusedChild: -1
+    };
+  },
+  provide: function provide() {
+    return {
+      vcMenu: this
+    };
+  },
+  watch: {
+    focusedChild: function focusedChild(val) {
+      var focusables = this.focusables;
+      var index = this.indexOfUid(val);
+      if (index < 0) return;
+      focusables[index].$el.focus();
+    }
+  },
+  methods: {
+    handleFocusout: function handleFocusout() {
+      this.active = false;
+      this.focusedChild = -1;
+      if (this.$refs.menu.contains(event.relatedTarget)) return;
+      this.$emit('exitfocus');
+    },
+    registerFocus: function registerFocus(uid) {
+      var index = this.indexOfUid(uid);
+      this.focusedChild = uid;
+    },
+    registerBlur: function registerBlur(uid) {
+      var index = this.indexOfUid(uid);
+      if (this.focusedChild !== index) return;
+      this.focusedChild = -1;
+    },
+    registerOption: function registerOption(optionVm) {
+      this.focusables.push(optionVm);
+    },
+    unregisterOption: function unregisterOption(uid) {
+      var index = this.indexOfUid(uid);
+      if (index < 0) return;
+      this.focusables.splice(index, 1);
+    },
+    indexOfUid: function indexOfUid(uid) {
+      return this.focusables.findIndex(function (focusable) {
+        return focusable._uid === uid;
+      });
+    },
+    handleKeydownDown: function handleKeydownDown() {
+      var active = this.active,
+          focusables = this.focusables,
+          indexOfUid = this.indexOfUid,
+          focusedChild = this.focusedChild;
+      if (!active) return;
+      var index = focusNext(focusables, indexOfUid(focusedChild));
+      this.focusedChild = focusables[index]._uid;
+    },
+    handleKeydownUp: function handleKeydownUp() {
+      var active = this.active,
+          focusables = this.focusables,
+          indexOfUid = this.indexOfUid,
+          focusedChild = this.focusedChild;
+      if (!active) return;
+      var index = focusPrev(focusables, indexOfUid(focusedChild));
+      this.focusedChild = focusables[index]._uid;
+    }
+  }
+};/* script */
+var __vue_script__$3 = script$3;
+/* template */
+
+var __vue_render__ = function __vue_render__() {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _c(_vm.tag, _vm._g(_vm._b({
+    ref: "menu",
+    tag: "component",
+    on: {
+      "focusin": function focusin($event) {
+        _vm.active = true;
+      },
+      "focusout": _vm.handleFocusout,
+      "keydown": [function ($event) {
+        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "up", 38, $event.key, ["Up", "ArrowUp"])) {
+          return null;
+        }
+
+        return _vm.handleKeydownUp($event);
+      }, function ($event) {
+        if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "down", 40, $event.key, ["Down", "ArrowDown"])) {
+          return null;
+        }
+
+        return _vm.handleKeydownDown($event);
+      }]
+    }
+  }, 'component', _vm.$attrs, false), _vm.$listeners), [_vm._t("default")], 2);
+};
+
+var __vue_staticRenderFns__ = [];
+/* style */
+
+var __vue_inject_styles__$3 = undefined;
+/* scoped */
+
+var __vue_scope_id__$3 = undefined;
+/* module identifier */
+
+var __vue_module_identifier__$3 = "data-v-eb648ea0";
+/* functional template */
+
+var __vue_is_functional_template__$3 = false;
+/* style inject */
+
+/* style inject SSR */
+
+/* style inject shadow dom */
+
+var __vue_component__$3 = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__,
+  staticRenderFns: __vue_staticRenderFns__
+}, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, false, undefined, undefined, undefined);//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var script$4 = {
+  name: 'VcOption',
+  props: {
+    tag: {
+      type: String,
+      default: 'button'
+    }
+  },
+  inject: ['vcMenu'],
+  methods: {
+    registerFocus: function registerFocus() {
+      this.vcMenu.registerFocus(this._uid);
+    },
+    registerBlur: function registerBlur() {
+      this.vcMenu.registerBlur(this._uid);
+    }
+  },
+  created: function created() {
+    this.vcMenu.registerOption(this);
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.vcMenu.unregisterOption(this._uid);
+  },
+  render: function render(h, _ref) {
+    var props = _ref.props,
+        scopedSlots = _ref.scopedSlots;
+    h(props.tag, scopedSlots.default());
+  }
+};/* script */
+var __vue_script__$4 = script$4;
+/* template */
+
+var __vue_render__$1 = function __vue_render__() {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _c(_vm.tag, _vm._g(_vm._b({
+    tag: "component",
+    on: {
+      "focus": _vm.registerFocus,
+      "blur": _vm.registerBlur
+    }
+  }, 'component', _vm.$attrs, false), _vm.$listeners), [_vm._t("default")], 2);
+};
+
+var __vue_staticRenderFns__$1 = [];
+/* style */
+
+var __vue_inject_styles__$4 = undefined;
+/* scoped */
+
+var __vue_scope_id__$4 = undefined;
+/* module identifier */
+
+var __vue_module_identifier__$4 = "data-v-7b8c6610";
+/* functional template */
+
+var __vue_is_functional_template__$4 = false;
+/* style inject */
+
+/* style inject SSR */
+
+/* style inject shadow dom */
+
+var __vue_component__$4 = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__$1,
+  staticRenderFns: __vue_staticRenderFns__$1
+}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);var script$5 = {
+  data: function data() {
+    return {
+      activated: false
+    };
+  },
+  methods: {
+    toggle: function toggle() {
+      if ([true, false].includes(arguments[0])) {
+        this.activated = arguments[0];
+      } else {
+        this.activated = !this.activated;
+      }
+    }
+  },
+  render: function render() {
+    var activated = this.activated,
+        toggle = this.toggle;
+    return this.$scopedSlots.default({
+      activated: activated,
+      toggle: toggle
+    });
+  }
+};/* script */
+var __vue_script__$5 = script$5;
+/* template */
+
+/* style */
+
+var __vue_inject_styles__$5 = undefined;
+/* scoped */
+
+var __vue_scope_id__$5 = undefined;
+/* module identifier */
+
+var __vue_module_identifier__$5 = "data-v-e3fea62a";
+/* functional template */
+
+var __vue_is_functional_template__$5 = undefined;
+/* style inject */
+
+/* style inject SSR */
+
+/* style inject shadow dom */
+
+var __vue_component__$5 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, undefined, undefined);/* eslint-disable import/prefer-default-export */var components=/*#__PURE__*/Object.freeze({__proto__:null,VcAsync: __vue_component__,VcMultiScreen: __vue_component__$1,VcResetable: __vue_component__$2,VcMenu: __vue_component__$3,VcOption: __vue_component__$4,VcToggle: __vue_component__$5});var install = function installVueCharge(Vue) {
   if (install.installed) return;
   install.installed = true;
   Object.entries(components).forEach(function (_ref) {
@@ -369,4 +661,4 @@ var plugin = {
     GlobalVue.use(plugin);
   }
 } // Default export is library as a whole, registered via Vue.use()
-exports.VcAsync=__vue_component__;exports.VcMultiScreen=__vue_component__$1;exports.VcResetable=__vue_component__$2;exports.default=plugin;
+exports.VcAsync=__vue_component__;exports.VcMenu=__vue_component__$3;exports.VcMultiScreen=__vue_component__$1;exports.VcOption=__vue_component__$4;exports.VcResetable=__vue_component__$2;exports.VcToggle=__vue_component__$5;exports.default=plugin;

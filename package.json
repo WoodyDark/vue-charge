@@ -1,6 +1,6 @@
 {
     "name": "vue-charge",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "A collection of renderless Vue 2 components that supercharges your existing components!",
     "author": "WoodyDark",
     "license": "MIT",
