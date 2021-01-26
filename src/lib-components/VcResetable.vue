@@ -6,12 +6,17 @@ export default {
     },
     data() {
         return {
-            key: 0
+            counter: 0
         }
     },
     methods: {
         reset() {
-            this.key++
+            this.counter++
+        }
+    },
+    computed: {
+        key() {
+            return `vc-resetable-${this._uid * 1000 + this.counter}`
         }
     },
     render(h) {
