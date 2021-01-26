@@ -1,8 +1,27 @@
 <template>
     <div id="app">
+        <vc-toggle>
+            <template v-slot="{ activated, toggle }">
+                <vc-menu
+                    @keydown.esc="toggle(false)"
+                    @exitfocus="toggle(false)"
+                >
+                    <button @click="toggle">
+                        Dropdown menu
+                    </button>
+
+                    <ul v-if="activated">
+                        <li v-for="num in 10" :key="num">
+                            <vc-option @click="toggle(false)" v-text="num">
+                            </vc-option>
+                        </li>
+                    </ul>
+                </vc-menu>
+            </template>
+        </vc-toggle>
+
         <vc-async :promise="fetchCoffee" default="idle">
             <template v-slot:idle="{ execute }">
-                <div></div>
                 <button @click="execute">Get me Coffee!</button>
             </template>
 
@@ -42,20 +61,32 @@
                 <button @click="transition('hello')">I am World</button>
             </template>
         </vc-multi-screen>
+
+        <vc-menu></vc-menu>
     </div>
 </template>
 
 <script>
 import Vue from 'vue'
 import axios from 'axios'
-import { VcAsync, VcMultiScreen, VcResetable } from '@/entry'
+import {
+    VcAsync,
+    VcMultiScreen,
+    VcResetable,
+    VcMenu,
+    VcOption,
+    VcToggle
+} from '@/entry'
 
 export default Vue.extend({
     name: 'ServeDev',
     components: {
         VcAsync,
         VcMultiScreen,
-        VcResetable
+        VcResetable,
+        VcMenu,
+        VcOption,
+        VcToggle
     },
     methods: {
         fetchCoffee() {
