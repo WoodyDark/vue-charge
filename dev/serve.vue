@@ -1,5 +1,17 @@
 <template>
     <div id="app">
+        <vc-dates value="2021-06-25" wrap="div">
+            <template v-slot:default="{ filledMonthView }">
+                <div>
+                    <div
+                        v-for="date in filledMonthView"
+                        :key="date.formatted"
+                        v-text="date"
+                    ></div>
+                </div>
+            </template>
+        </vc-dates>
+
         <vc-toggle>
             <template v-slot="{ activated, toggle }">
                 <vc-menu
@@ -69,25 +81,9 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
-import {
-    VcAsync,
-    VcMultiScreen,
-    VcResetable,
-    VcMenu,
-    VcOption,
-    VcToggle
-} from '@/entry'
 
 export default Vue.extend({
     name: 'ServeDev',
-    components: {
-        VcAsync,
-        VcMultiScreen,
-        VcResetable,
-        VcMenu,
-        VcOption,
-        VcToggle
-    },
     methods: {
         fetchCoffee() {
             return axios.get(
