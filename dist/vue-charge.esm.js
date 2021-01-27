@@ -416,7 +416,7 @@ var script$3 = {
       return this.focusables.findIndex(focusable => focusable._uid === uid);
     },
 
-    handleKeydownDown() {
+    focusNext() {
       const {
         active,
         focusables,
@@ -428,7 +428,7 @@ var script$3 = {
       this.focusedChild = focusables[index]._uid;
     },
 
-    handleKeydownUp() {
+    focusPrev() {
       const {
         active,
         focusables,
@@ -467,16 +467,19 @@ var __vue_render__ = function () {
           return null;
         }
 
-        return _vm.handleKeydownUp($event);
+        return _vm.focusPrev($event);
       }, function ($event) {
         if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "down", 40, $event.key, ["Down", "ArrowDown"])) {
           return null;
         }
 
-        return _vm.handleKeydownDown($event);
+        return _vm.focusNext($event);
       }]
     }
-  }, 'component', _vm.$attrs, false), _vm.$listeners), [_vm._t("default")], 2);
+  }, 'component', _vm.$attrs, false), _vm.$listeners), [_vm._t("default", null, null, {
+    focusNext: _vm.focusNext,
+    focusPrev: _vm.focusPrev
+  })], 2);
 };
 
 var __vue_staticRenderFns__ = [];
@@ -651,6 +654,299 @@ const __vue_is_functional_template__$5 = undefined;
 
 const __vue_component__$5 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, undefined, undefined);
 
+const prependZero = num => ('0' + num).slice(-2);
+
+function serializeMonthDates(dateString) {
+  const splitDate = dateString.split('-');
+  const year = splitDate[0];
+  const month = splitDate[1];
+  const maxDate = new Date(year, month, 0).getDate();
+  let dates = [];
+
+  for (let i = 0; i < maxDate; i++) {
+    const formattedDate = `${year}-${prependZero(month)}-${prependZero(i + 1)}`;
+    dates.push(formattedDate);
+  }
+
+  return dates;
+}
+
+const formatDate = datetime => {
+  const date = new Date(datetime);
+  return `${date.getFullYear()}-${prependZero(date.getMonth() + 1)}-${prependZero(date.getDate())}`;
+};
+
+const weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+const padRight = (formattedDate, weekday) => {
+  let date = new Date(formattedDate);
+  const dates = [];
+
+  while (weekdays[date.getDay()] !== weekday) {
+    const newDate = formatDate(date.setDate(date.getDate() + 1));
+    dates.push(newDate);
+  }
+
+  return dates;
+};
+
+const padLeft = (formattedDate, weekday) => {
+  let date = new Date(formattedDate);
+  const dates = [];
+
+  while (weekdays[date.getDay()] !== weekday) {
+    const newDate = formatDate(date.setDate(date.getDate() - 1));
+    dates.push(newDate);
+  }
+
+  return dates.reverse();
+};
+
+const dateMeta = formattedDate => {
+  const jsDate = new Date(formattedDate);
+  return {
+    formatted: formattedDate,
+    js: jsDate,
+    weekday: weekdays[jsDate.getDay()],
+    date: jsDate.getDate(),
+    prepended: prependZero(jsDate.getDate())
+  };
+};
+
+var script$6 = {
+  props: {
+    wrap: {
+      type: String,
+      default: undefined
+    },
+    value: {
+      type: String,
+      default: formatDate(new Date())
+    },
+    weekStart: {
+      type: String,
+      default: 'sunday',
+      validator: val => weekdays.indexOf(val) > -1
+    },
+    fill: {
+      type: String,
+      default: 'right',
+      validator: val => ['left', 'right'].indexOf(val) > -1
+    }
+  },
+  computed: {
+    weekEnd() {
+      let weekEndIndex = weekdays.indexOf(this.weekStart) + 6;
+      if (weekEndIndex > 6) weekEndIndex -= 6;
+      return weekdays[weekEndIndex];
+    },
+
+    monthView() {
+      return serializeMonthDates(this.value).map(formattedDate => dateMeta(formattedDate));
+    },
+
+    paddedMonthView() {
+      const {
+        weekStart,
+        weekEnd
+      } = this;
+      const formattedMonthDates = this.monthView.map(meta => meta.formatted);
+      const leftPads = padLeft(formattedMonthDates[0], weekStart).map(formattedDate => ({ ...dateMeta(formattedDate),
+        padding: true
+      }));
+      const rightPads = padRight(formattedMonthDates[formattedMonthDates.length - 1], weekEnd).map(formattedDate => ({ ...dateMeta(formattedDate),
+        padding: true
+      }));
+      const mainDates = formattedMonthDates.map(formattedDate => dateMeta(formattedDate));
+      return [...leftPads, ...mainDates, ...rightPads];
+    },
+
+    filledMonthView() {
+      const {
+        paddedMonthView,
+        weekEnd,
+        weekStart,
+        fill
+      } = this;
+      let dates = paddedMonthView.map(meta => ({ ...meta,
+        js: new Date(meta.formatted)
+      }));
+
+      while (dates.length < 42) {
+        const index = fill === 'right' ? dates.length - 1 : 0;
+        const lastDate = new Date(dates[index].formatted);
+        const date = fill === 'right' ? lastDate.getDate() + 1 : lastDate.getDate() - 1;
+        const nextDay = lastDate.setDate(date);
+        const paddings = [formatDate(nextDay), ...(fill === 'right' ? padRight(formatDate(nextDay), weekEnd) : padLeft(formatDate(nextDay), weekStart))];
+        dates = [...dates, ...paddings.map(formattedDate => ({ ...dateMeta(formattedDate),
+          padding: true
+        }))].sort((a, b) => a.js - b.js);
+      }
+
+      return dates;
+    },
+
+    weekView() {
+      const {
+        value,
+        weekStart,
+        weekEnd
+      } = this;
+      return [...padLeft(value, weekStart), value, ...padRight(value, weekEnd)].map(formattedDate => dateMeta(formattedDate));
+    }
+
+  },
+
+  render(h) {
+    const {
+      wrap,
+      monthView,
+      weekView,
+      paddedMonthView,
+      filledMonthView
+    } = this;
+    const content = this.$scopedSlots.default({
+      monthView,
+      weekView,
+      paddedMonthView,
+      filledMonthView
+    });
+    return wrap ? h(wrap, content) : content;
+  }
+
+};
+
+/* script */
+const __vue_script__$6 = script$6;
+/* template */
+
+/* style */
+
+const __vue_inject_styles__$6 = undefined;
+/* scoped */
+
+const __vue_scope_id__$6 = undefined;
+/* module identifier */
+
+const __vue_module_identifier__$6 = undefined;
+/* functional template */
+
+const __vue_is_functional_template__$6 = undefined;
+/* style inject */
+
+/* style inject SSR */
+
+/* style inject shadow dom */
+
+const __vue_component__$6 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, false, undefined, undefined, undefined);
+
+const wdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+const capString = string => string.charAt(0).toUpperCase() + string.slice(1);
+
+const dayHelpers = {};
+wdays.forEach(day => {
+  dayHelpers[`${day}s`] = function () {
+    const {
+      value
+    } = this;
+    if (!value) return [];
+    return serializeMonthDates(value).filter(formattedDate => {
+      return new Date(formattedDate).getDay() === wdays.indexOf(day);
+    });
+  };
+});
+var script$7 = {
+  props: {
+    wrap: {
+      type: String,
+      default: undefined
+    },
+    weekStart: {
+      type: String,
+      default: 'sunday'
+    },
+    value: {
+      type: String,
+      default: undefined
+    }
+  },
+  computed: {
+    weekEnd() {
+      let weekEndIndex = wdays.indexOf(this.weekStart) + 6;
+      if (weekEndIndex > 6) weekEndIndex -= 6;
+      return wdays[weekEndIndex];
+    },
+
+    weekdays() {
+      let weekdays = [];
+      const startIndex = wdays.indexOf(this.weekStart);
+      wdays.forEach(day => {
+        if (wdays.indexOf(day) >= startIndex) {
+          weekdays.push(day);
+        }
+      });
+      wdays.forEach(day => {
+        if (wdays.indexOf(day) < startIndex) {
+          weekdays.push(day);
+        }
+      });
+      return weekdays.map(day => {
+        const capDay = capString(day);
+        return {
+          day: capDay,
+          short: capDay.substr(0, 3),
+          value: day
+        };
+      });
+    },
+
+    ...dayHelpers
+  },
+
+  render(h) {
+    const {
+      wrap,
+      weekdays
+    } = this;
+    const helperNames = Object.keys(dayHelpers);
+    const helpers = {};
+    helperNames.forEach(fnName => {
+      helpers[fnName] = this[fnName];
+    });
+    const content = this.$scopedSlots.default({
+      weekdays,
+      ...helpers
+    });
+    return wrap ? h(wrap, content) : content;
+  }
+
+};
+
+/* script */
+const __vue_script__$7 = script$7;
+/* template */
+
+/* style */
+
+const __vue_inject_styles__$7 = undefined;
+/* scoped */
+
+const __vue_scope_id__$7 = undefined;
+/* module identifier */
+
+const __vue_module_identifier__$7 = undefined;
+/* functional template */
+
+const __vue_is_functional_template__$7 = undefined;
+/* style inject */
+
+/* style inject SSR */
+
+/* style inject shadow dom */
+
+const __vue_component__$7 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$7, __vue_script__$7, __vue_scope_id__$7, __vue_is_functional_template__$7, __vue_module_identifier__$7, false, undefined, undefined, undefined);
+
 /* eslint-disable import/prefer-default-export */
 
 var components = /*#__PURE__*/Object.freeze({
@@ -660,7 +956,9 @@ var components = /*#__PURE__*/Object.freeze({
     VcResetable: __vue_component__$2,
     VcMenu: __vue_component__$3,
     VcOption: __vue_component__$4,
-    VcToggle: __vue_component__$5
+    VcToggle: __vue_component__$5,
+    VcDates: __vue_component__$6,
+    VcWeekdays: __vue_component__$7
 });
 
 // Import vue components
@@ -668,6 +966,15 @@ var components = /*#__PURE__*/Object.freeze({
 const install = function installVueCharge(Vue) {
   if (install.installed) return;
   install.installed = true;
+  Vue.prototype.$vc = {
+    run() {
+      const callbacks = [...arguments];
+      callbacks.forEach(fn => {
+        typeof fn === 'function' ? fn() : fn;
+      });
+    }
+
+  };
   Object.entries(components).forEach(([componentName, component]) => {
     Vue.component(componentName, component);
   });
@@ -679,4 +986,4 @@ const plugin = {
 }; // To auto-install on non-es builds, when vue is found
 
 export default plugin;
-export { __vue_component__ as VcAsync, __vue_component__$3 as VcMenu, __vue_component__$1 as VcMultiScreen, __vue_component__$4 as VcOption, __vue_component__$2 as VcResetable, __vue_component__$5 as VcToggle };
+export { __vue_component__ as VcAsync, __vue_component__$6 as VcDates, __vue_component__$3 as VcMenu, __vue_component__$1 as VcMultiScreen, __vue_component__$4 as VcOption, __vue_component__$2 as VcResetable, __vue_component__$5 as VcToggle, __vue_component__$7 as VcWeekdays };

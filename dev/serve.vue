@@ -1,5 +1,22 @@
 <template>
     <div id="app">
+        <vc-weekdays wrap="div" value="2021-02-27">
+            <template v-slot:default="wday">
+                <div>
+                    <div v-for="dayMeta in wday.weekdays" :key="dayMeta.short">
+                        <div v-text="dayMeta"></div>
+
+                        <div
+                            v-for="date in wday[`${dayMeta.value}s`]"
+                            :key="date"
+                        >
+                            <div v-text="date"></div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </vc-weekdays>
+
         <vc-dates value="2021-06-25" wrap="div">
             <template v-slot:default="{ filledMonthView }">
                 <div>
@@ -18,16 +35,26 @@
                     @keydown.esc="toggle(false)"
                     @exitfocus="toggle(false)"
                 >
-                    <button @click="toggle">
-                        Dropdown menu
-                    </button>
+                    <template v-slot:default="{ focusNext, focusPrev }">
+                        <div
+                            @keydown.left="focusPrev"
+                            @keydown.right="focusNext"
+                        >
+                            <button @click="toggle">
+                                Dropdown menu
+                            </button>
 
-                    <ul v-if="activated">
-                        <li v-for="num in 10" :key="num">
-                            <vc-option @click="toggle(false)" v-text="num">
-                            </vc-option>
-                        </li>
-                    </ul>
+                            <ul v-if="activated">
+                                <li v-for="num in 10" :key="num">
+                                    <vc-option
+                                        @click="toggle(false)"
+                                        v-text="num"
+                                    >
+                                    </vc-option>
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
                 </vc-menu>
             </template>
         </vc-toggle>

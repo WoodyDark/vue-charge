@@ -1,9 +1,70 @@
-'use strict';Object.defineProperty(exports,'__esModule',{value:true});function _slicedToArray(arr, i) {
+'use strict';Object.defineProperty(exports,'__esModule',{value:true});function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 }
 
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
@@ -48,6 +109,10 @@ function _arrayLikeToArray(arr, len) {
   for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
 
   return arr2;
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 function _nonIterableRest() {
@@ -424,22 +489,26 @@ var script$3 = {
         return focusable._uid === uid;
       });
     },
-    handleKeydownDown: function handleKeydownDown() {
+    focusNext: function focusNext$1() {
       var active = this.active,
           focusables = this.focusables,
           indexOfUid = this.indexOfUid,
           focusedChild = this.focusedChild;
       if (!active) return;
+
       var index = focusNext(focusables, indexOfUid(focusedChild));
+
       this.focusedChild = focusables[index]._uid;
     },
-    handleKeydownUp: function handleKeydownUp() {
+    focusPrev: function focusPrev$1() {
       var active = this.active,
           focusables = this.focusables,
           indexOfUid = this.indexOfUid,
           focusedChild = this.focusedChild;
       if (!active) return;
+
       var index = focusPrev(focusables, indexOfUid(focusedChild));
+
       this.focusedChild = focusables[index]._uid;
     }
   }
@@ -467,16 +536,19 @@ var __vue_render__ = function __vue_render__() {
           return null;
         }
 
-        return _vm.handleKeydownUp($event);
+        return _vm.focusPrev($event);
       }, function ($event) {
         if (!$event.type.indexOf('key') && _vm._k($event.keyCode, "down", 40, $event.key, ["Down", "ArrowDown"])) {
           return null;
         }
 
-        return _vm.handleKeydownDown($event);
+        return _vm.focusNext($event);
       }]
     }
-  }, 'component', _vm.$attrs, false), _vm.$listeners), [_vm._t("default")], 2);
+  }, 'component', _vm.$attrs, false), _vm.$listeners), [_vm._t("default", null, null, {
+    focusNext: _vm.focusNext,
+    focusPrev: _vm.focusPrev
+  })], 2);
 };
 
 var __vue_staticRenderFns__ = [];
@@ -488,7 +560,7 @@ var __vue_inject_styles__$3 = undefined;
 var __vue_scope_id__$3 = undefined;
 /* module identifier */
 
-var __vue_module_identifier__$3 = "data-v-eb648ea0";
+var __vue_module_identifier__$3 = "data-v-22f74dfa";
 /* functional template */
 
 var __vue_is_functional_template__$3 = false;
@@ -628,9 +700,299 @@ var __vue_is_functional_template__$5 = undefined;
 
 /* style inject shadow dom */
 
-var __vue_component__$5 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, undefined, undefined);/* eslint-disable import/prefer-default-export */var components=/*#__PURE__*/Object.freeze({__proto__:null,VcAsync: __vue_component__,VcMultiScreen: __vue_component__$1,VcResetable: __vue_component__$2,VcMenu: __vue_component__$3,VcOption: __vue_component__$4,VcToggle: __vue_component__$5});var install = function installVueCharge(Vue) {
+var __vue_component__$5 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, undefined, undefined);var prependZero = function prependZero(num) {
+  return ('0' + num).slice(-2);
+};function serializeMonthDates(dateString) {
+  var splitDate = dateString.split('-');
+  var year = splitDate[0];
+  var month = splitDate[1];
+  var maxDate = new Date(year, month, 0).getDate();
+  var dates = [];
+
+  for (var i = 0; i < maxDate; i++) {
+    var formattedDate = "".concat(year, "-").concat(prependZero(month), "-").concat(prependZero(i + 1));
+    dates.push(formattedDate);
+  }
+
+  return dates;
+}var formatDate = function formatDate(datetime) {
+  var date = new Date(datetime);
+  return "".concat(date.getFullYear(), "-").concat(prependZero(date.getMonth() + 1), "-").concat(prependZero(date.getDate()));
+};var weekdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+var padRight = function padRight(formattedDate, weekday) {
+  var date = new Date(formattedDate);
+  var dates = [];
+
+  while (weekdays[date.getDay()] !== weekday) {
+    var newDate = formatDate(date.setDate(date.getDate() + 1));
+    dates.push(newDate);
+  }
+
+  return dates;
+};
+
+var padLeft = function padLeft(formattedDate, weekday) {
+  var date = new Date(formattedDate);
+  var dates = [];
+
+  while (weekdays[date.getDay()] !== weekday) {
+    var newDate = formatDate(date.setDate(date.getDate() - 1));
+    dates.push(newDate);
+  }
+
+  return dates.reverse();
+};
+
+var dateMeta = function dateMeta(formattedDate) {
+  var jsDate = new Date(formattedDate);
+  return {
+    formatted: formattedDate,
+    js: jsDate,
+    weekday: weekdays[jsDate.getDay()],
+    date: jsDate.getDate(),
+    prepended: prependZero(jsDate.getDate())
+  };
+};
+
+var script$6 = {
+  props: {
+    wrap: {
+      type: String,
+      default: undefined
+    },
+    value: {
+      type: String,
+      default: formatDate(new Date())
+    },
+    weekStart: {
+      type: String,
+      default: 'sunday',
+      validator: function validator(val) {
+        return weekdays.indexOf(val) > -1;
+      }
+    },
+    fill: {
+      type: String,
+      default: 'right',
+      validator: function validator(val) {
+        return ['left', 'right'].indexOf(val) > -1;
+      }
+    }
+  },
+  computed: {
+    weekEnd: function weekEnd() {
+      var weekEndIndex = weekdays.indexOf(this.weekStart) + 6;
+      if (weekEndIndex > 6) weekEndIndex -= 6;
+      return weekdays[weekEndIndex];
+    },
+    monthView: function monthView() {
+      return serializeMonthDates(this.value).map(function (formattedDate) {
+        return dateMeta(formattedDate);
+      });
+    },
+    paddedMonthView: function paddedMonthView() {
+      var weekStart = this.weekStart,
+          weekEnd = this.weekEnd;
+      var formattedMonthDates = this.monthView.map(function (meta) {
+        return meta.formatted;
+      });
+      var leftPads = padLeft(formattedMonthDates[0], weekStart).map(function (formattedDate) {
+        return _objectSpread2(_objectSpread2({}, dateMeta(formattedDate)), {}, {
+          padding: true
+        });
+      });
+      var rightPads = padRight(formattedMonthDates[formattedMonthDates.length - 1], weekEnd).map(function (formattedDate) {
+        return _objectSpread2(_objectSpread2({}, dateMeta(formattedDate)), {}, {
+          padding: true
+        });
+      });
+      var mainDates = formattedMonthDates.map(function (formattedDate) {
+        return dateMeta(formattedDate);
+      });
+      return [].concat(_toConsumableArray(leftPads), _toConsumableArray(mainDates), _toConsumableArray(rightPads));
+    },
+    filledMonthView: function filledMonthView() {
+      var paddedMonthView = this.paddedMonthView,
+          weekEnd = this.weekEnd,
+          weekStart = this.weekStart,
+          fill = this.fill;
+      var dates = paddedMonthView.map(function (meta) {
+        return _objectSpread2(_objectSpread2({}, meta), {}, {
+          js: new Date(meta.formatted)
+        });
+      });
+
+      while (dates.length < 42) {
+        var index = fill === 'right' ? dates.length - 1 : 0;
+        var lastDate = new Date(dates[index].formatted);
+        var date = fill === 'right' ? lastDate.getDate() + 1 : lastDate.getDate() - 1;
+        var nextDay = lastDate.setDate(date);
+        var paddings = [formatDate(nextDay)].concat(_toConsumableArray(fill === 'right' ? padRight(formatDate(nextDay), weekEnd) : padLeft(formatDate(nextDay), weekStart)));
+        dates = [].concat(_toConsumableArray(dates), _toConsumableArray(paddings.map(function (formattedDate) {
+          return _objectSpread2(_objectSpread2({}, dateMeta(formattedDate)), {}, {
+            padding: true
+          });
+        }))).sort(function (a, b) {
+          return a.js - b.js;
+        });
+      }
+
+      return dates;
+    },
+    weekView: function weekView() {
+      var value = this.value,
+          weekStart = this.weekStart,
+          weekEnd = this.weekEnd;
+      return [].concat(_toConsumableArray(padLeft(value, weekStart)), [value], _toConsumableArray(padRight(value, weekEnd))).map(function (formattedDate) {
+        return dateMeta(formattedDate);
+      });
+    }
+  },
+  render: function render(h) {
+    var wrap = this.wrap,
+        monthView = this.monthView,
+        weekView = this.weekView,
+        paddedMonthView = this.paddedMonthView,
+        filledMonthView = this.filledMonthView;
+    var content = this.$scopedSlots.default({
+      monthView: monthView,
+      weekView: weekView,
+      paddedMonthView: paddedMonthView,
+      filledMonthView: filledMonthView
+    });
+    return wrap ? h(wrap, content) : content;
+  }
+};/* script */
+var __vue_script__$6 = script$6;
+/* template */
+
+/* style */
+
+var __vue_inject_styles__$6 = undefined;
+/* scoped */
+
+var __vue_scope_id__$6 = undefined;
+/* module identifier */
+
+var __vue_module_identifier__$6 = "data-v-450f90c8";
+/* functional template */
+
+var __vue_is_functional_template__$6 = undefined;
+/* style inject */
+
+/* style inject SSR */
+
+/* style inject shadow dom */
+
+var __vue_component__$6 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, false, undefined, undefined, undefined);var wdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+var capString = function capString(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+var dayHelpers = {};
+wdays.forEach(function (day) {
+  dayHelpers["".concat(day, "s")] = function () {
+    var value = this.value;
+    if (!value) return [];
+    return serializeMonthDates(value).filter(function (formattedDate) {
+      return new Date(formattedDate).getDay() === wdays.indexOf(day);
+    });
+  };
+});
+var script$7 = {
+  props: {
+    wrap: {
+      type: String,
+      default: undefined
+    },
+    weekStart: {
+      type: String,
+      default: 'sunday'
+    },
+    value: {
+      type: String,
+      default: undefined
+    }
+  },
+  computed: _objectSpread2({
+    weekEnd: function weekEnd() {
+      var weekEndIndex = wdays.indexOf(this.weekStart) + 6;
+      if (weekEndIndex > 6) weekEndIndex -= 6;
+      return wdays[weekEndIndex];
+    },
+    weekdays: function weekdays() {
+      var weekdays = [];
+      var startIndex = wdays.indexOf(this.weekStart);
+      wdays.forEach(function (day) {
+        if (wdays.indexOf(day) >= startIndex) {
+          weekdays.push(day);
+        }
+      });
+      wdays.forEach(function (day) {
+        if (wdays.indexOf(day) < startIndex) {
+          weekdays.push(day);
+        }
+      });
+      return weekdays.map(function (day) {
+        var capDay = capString(day);
+        return {
+          day: capDay,
+          short: capDay.substr(0, 3),
+          value: day
+        };
+      });
+    }
+  }, dayHelpers),
+  render: function render(h) {
+    var _this = this;
+
+    var wrap = this.wrap,
+        weekdays = this.weekdays;
+    var helperNames = Object.keys(dayHelpers);
+    var helpers = {};
+    helperNames.forEach(function (fnName) {
+      helpers[fnName] = _this[fnName];
+    });
+    var content = this.$scopedSlots.default(_objectSpread2({
+      weekdays: weekdays
+    }, helpers));
+    return wrap ? h(wrap, content) : content;
+  }
+};/* script */
+var __vue_script__$7 = script$7;
+/* template */
+
+/* style */
+
+var __vue_inject_styles__$7 = undefined;
+/* scoped */
+
+var __vue_scope_id__$7 = undefined;
+/* module identifier */
+
+var __vue_module_identifier__$7 = "data-v-1ad0a1d3";
+/* functional template */
+
+var __vue_is_functional_template__$7 = undefined;
+/* style inject */
+
+/* style inject SSR */
+
+/* style inject shadow dom */
+
+var __vue_component__$7 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$7, __vue_script__$7, __vue_scope_id__$7, __vue_is_functional_template__$7, __vue_module_identifier__$7, false, undefined, undefined, undefined);/* eslint-disable import/prefer-default-export */var components=/*#__PURE__*/Object.freeze({__proto__:null,VcAsync: __vue_component__,VcMultiScreen: __vue_component__$1,VcResetable: __vue_component__$2,VcMenu: __vue_component__$3,VcOption: __vue_component__$4,VcToggle: __vue_component__$5,VcDates: __vue_component__$6,VcWeekdays: __vue_component__$7});var install = function installVueCharge(Vue) {
   if (install.installed) return;
   install.installed = true;
+  Vue.prototype.$vc = {
+    run: function run() {
+      var callbacks = Array.prototype.slice.call(arguments);
+      callbacks.forEach(function (fn) {
+        typeof fn === 'function' ? fn() : fn;
+      });
+    }
+  };
   Object.entries(components).forEach(function (_ref) {
     var _ref2 = _slicedToArray(_ref, 2),
         componentName = _ref2[0],
@@ -661,4 +1023,4 @@ var plugin = {
     GlobalVue.use(plugin);
   }
 } // Default export is library as a whole, registered via Vue.use()
-exports.VcAsync=__vue_component__;exports.VcMenu=__vue_component__$3;exports.VcMultiScreen=__vue_component__$1;exports.VcOption=__vue_component__$4;exports.VcResetable=__vue_component__$2;exports.VcToggle=__vue_component__$5;exports.default=plugin;
+exports.VcAsync=__vue_component__;exports.VcDates=__vue_component__$6;exports.VcMenu=__vue_component__$3;exports.VcMultiScreen=__vue_component__$1;exports.VcOption=__vue_component__$4;exports.VcResetable=__vue_component__$2;exports.VcToggle=__vue_component__$5;exports.VcWeekdays=__vue_component__$7;exports.default=plugin;

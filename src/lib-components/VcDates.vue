@@ -1,11 +1,8 @@
 <script>
-const prependZero = num => ('0' + num).slice(-2)
-const formatDate = datetime => {
-    const date = new Date(datetime)
-    return `${date.getFullYear()}-${prependZero(
-        date.getMonth() + 1
-    )}-${prependZero(date.getDate())}`
-}
+import serializeMonthDates from '../utils/SerializeMonthDates'
+import formatDate from '../utils/FormatDate'
+import prependZero from '../utils/PrependZero'
+
 const weekdays = [
     'sunday',
     'monday',
@@ -73,19 +70,9 @@ export default {
             return weekdays[weekEndIndex]
         },
         monthView() {
-            const { value } = this
-            const splitValue = value.split('-')
-            const year = splitValue[0]
-            const month = splitValue[1]
-            const maxDate = new Date(year, month, 0).getDate()
-            let dates = []
-
-            for (let i = 0; i < maxDate; i++) {
-                const formattedDate = `${year}-${month}-${prependZero(i + 1)}`
-                dates.push(dateMeta(formattedDate))
-            }
-
-            return dates
+            return serializeMonthDates(this.value).map(formattedDate =>
+                dateMeta(formattedDate)
+            )
         },
         paddedMonthView() {
             const { weekStart, weekEnd } = this

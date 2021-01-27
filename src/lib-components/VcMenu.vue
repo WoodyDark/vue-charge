@@ -3,13 +3,13 @@
         ref="menu"
         @focusin="active = true"
         @focusout="handleFocusout"
-        @keydown.up="handleKeydownUp"
-        @keydown.down="handleKeydownDown"
+        @keydown.up="focusPrev"
+        @keydown.down="focusNext"
         v-bind="$attrs"
         v-on="$listeners"
         :is="tag"
     >
-        <slot></slot>
+        <slot v-bind="{ focusNext, focusPrev }"></slot>
     </component>
 </template>
 
@@ -72,13 +72,13 @@ export default {
                 focusable => focusable._uid === uid
             )
         },
-        handleKeydownDown() {
+        focusNext() {
             const { active, focusables, indexOfUid, focusedChild } = this
             if (!active) return
             const index = focusNext(focusables, indexOfUid(focusedChild))
             this.focusedChild = focusables[index]._uid
         },
-        handleKeydownUp() {
+        focusPrev() {
             const { active, focusables, indexOfUid, focusedChild } = this
             if (!active) return
             const index = focusPrev(focusables, indexOfUid(focusedChild))
