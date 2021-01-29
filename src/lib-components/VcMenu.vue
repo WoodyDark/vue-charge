@@ -3,17 +3,18 @@
         ref="menu"
         @focusin="active = true"
         @focusout="handleFocusout"
-        @keydown.up="handleKeydownUp"
-        @keydown.down="handleKeydownDown"
+        @keydown.up="focusPrev"
+        @keydown.down="focusNext"
         v-bind="$attrs"
         v-on="$listeners"
         :is="tag"
     >
-        <slot></slot>
+        <slot v-bind="{ focusNext, focusPrev }"></slot>
     </component>
 </template>
 
 <script>
+import createRegistrable from '../utils/CreateRegistrable'
 import { focusNext, focusPrev } from '../utils/FocusTrap'
 
 export default {
@@ -36,13 +37,14 @@ export default {
     watch: {
         focusedChild(val) {
             const { focusables } = this
-            const index = this.indexOfUid(val)
+            const index = this.indexOfFocusable(val)
 
             if (index < 0) return
             focusables[index].$el.focus()
         }
     },
     methods: {
+        ...createRegistrable('focusables', 'focusable'),
         handleFocusout() {
             this.active = false
             this.focusedChild = -1
@@ -51,38 +53,25 @@ export default {
             this.$emit('exitfocus')
         },
         registerFocus(uid) {
-            const index = this.indexOfUid(uid)
+            const index = this.indexOfFocusable(uid)
             this.focusedChild = uid
         },
         registerBlur(uid) {
-            const index = this.indexOfUid(uid)
+            const index = this.indexOfFocusable(uid)
             if (this.focusedChild !== index) return
             this.focusedChild = -1
         },
-        registerOption(optionVm) {
-            this.focusables.push(optionVm)
-        },
-        unregisterOption(uid) {
-            const index = this.indexOfUid(uid)
-            if (index < 0) return
-            this.focusables.splice(index, 1)
-        },
-        indexOfUid(uid) {
-            return this.focusables.findIndex(
-                focusable => focusable._uid === uid
-            )
-        },
-        handleKeydownDown() {
-            const { active, focusables, indexOfUid, focusedChild } = this
+        focusNext() {
+            const { active, focusables, indexOfFocusable, focusedChild } = this
             if (!active) return
-            const index = focusNext(focusables, indexOfUid(focusedChild))
-            this.focusedChild = focusables[index]._uid
+            const index = focusNext(focusables, indexOfFocusable(focusedChild))
+            this.focusedChild = index < 0 ? -1 : focusables[index]._uid
         },
-        handleKeydownUp() {
-            const { active, focusables, indexOfUid, focusedChild } = this
+        focusPrev() {
+            const { active, focusables, indexOfFocusable, focusedChild } = this
             if (!active) return
-            const index = focusPrev(focusables, indexOfUid(focusedChild))
-            this.focusedChild = focusables[index]._uid
+            const index = focusPrev(focusables, indexOfFocusable(focusedChild))
+            this.focusedChild = index < 0 ? -1 : focusables[index]._uid
         }
     }
 }

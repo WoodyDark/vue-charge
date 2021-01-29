@@ -1,6 +1,6 @@
 {
     "name": "vue-charge",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "A collection of renderless Vue 2 components that supercharges your existing components!",
     "author": "WoodyDark",
     "license": "MIT",
@@ -31,7 +31,6 @@
     },
     "dependencies": {},
     "devDependencies": {
-        "axios": "^0.21.1",
         "@babel/core": "^7.9.0",
         "@babel/preset-env": "^7.9.5",
         "@rollup/plugin-alias": "^2.2.0",
@@ -39,6 +38,7 @@
         "@rollup/plugin-replace": "^2.3.2",
         "@vue/cli-plugin-babel": "^4.3.1",
         "@vue/cli-service": "^4.3.1",
+        "axios": "^0.21.1",
         "cross-env": "^7.0.2",
         "minimist": "^1.2.5",
         "rollup": "^2.7.3",
