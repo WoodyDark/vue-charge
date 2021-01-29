@@ -49,6 +49,7 @@ const dateMeta = formattedDate => {
 }
 
 export default {
+    name: 'VcDates',
     props: {
         wrap: { type: String, default: undefined },
         value: { type: String, default: formatDate(new Date()) },

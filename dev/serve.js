@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Dev from './serve.vue'
-import Entry from '../src/entry'
+import VueCharge from '../src/entry'
 
 Vue.config.productionTip = false
 
-Vue.use(Entry)
+Vue.use(VueCharge)
 
 new Vue({
     render: h => h(Dev)

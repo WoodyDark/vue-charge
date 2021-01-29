@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import createRegistrable from '../utils/CreateRegistrable'
 import { focusNext, focusPrev } from '../utils/FocusTrap'
 
 export default {
@@ -36,13 +37,14 @@ export default {
     watch: {
         focusedChild(val) {
             const { focusables } = this
-            const index = this.indexOfUid(val)
+            const index = this.indexOfFocusable(val)
 
             if (index < 0) return
             focusables[index].$el.focus()
         }
     },
     methods: {
+        ...createRegistrable('focusables', 'focusable'),
         handleFocusout() {
             this.active = false
             this.focusedChild = -1
@@ -51,38 +53,25 @@ export default {
             this.$emit('exitfocus')
         },
         registerFocus(uid) {
-            const index = this.indexOfUid(uid)
+            const index = this.indexOfFocusable(uid)
             this.focusedChild = uid
         },
         registerBlur(uid) {
-            const index = this.indexOfUid(uid)
+            const index = this.indexOfFocusable(uid)
             if (this.focusedChild !== index) return
             this.focusedChild = -1
         },
-        registerOption(optionVm) {
-            this.focusables.push(optionVm)
-        },
-        unregisterOption(uid) {
-            const index = this.indexOfUid(uid)
-            if (index < 0) return
-            this.focusables.splice(index, 1)
-        },
-        indexOfUid(uid) {
-            return this.focusables.findIndex(
-                focusable => focusable._uid === uid
-            )
-        },
         focusNext() {
-            const { active, focusables, indexOfUid, focusedChild } = this
+            const { active, focusables, indexOfFocusable, focusedChild } = this
             if (!active) return
-            const index = focusNext(focusables, indexOfUid(focusedChild))
-            this.focusedChild = focusables[index]._uid
+            const index = focusNext(focusables, indexOfFocusable(focusedChild))
+            this.focusedChild = index < 0 ? -1 : focusables[index]._uid
         },
         focusPrev() {
-            const { active, focusables, indexOfUid, focusedChild } = this
+            const { active, focusables, indexOfFocusable, focusedChild } = this
             if (!active) return
-            const index = focusPrev(focusables, indexOfUid(focusedChild))
-            this.focusedChild = focusables[index]._uid
+            const index = focusPrev(focusables, indexOfFocusable(focusedChild))
+            this.focusedChild = index < 0 ? -1 : focusables[index]._uid
         }
     }
 }

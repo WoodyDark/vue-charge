@@ -28,6 +28,7 @@ wdays.forEach(day => {
 })
 
 export default {
+    name: 'VcWeekdays',
     props: {
         wrap: { type: String, default: undefined },
         weekStart: { type: String, default: 'sunday' },

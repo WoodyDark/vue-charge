@@ -13,7 +13,14 @@ const install = function installVueCharge(Vue) {
             callbacks.forEach(fn => {
                 typeof fn === 'function' ? fn() : fn
             })
-        }
+        },
+        assign(key, value) {
+            key = value
+        },
+        log() {
+            console.log(...arguments)
+        },
+        goldenRatio: 1.618
     }
     Object.entries(components).forEach(([componentName, component]) => {
         Vue.component(componentName, component)
