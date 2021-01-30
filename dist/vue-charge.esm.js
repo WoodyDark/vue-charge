@@ -1309,8 +1309,8 @@ var __vue_staticRenderFns__$2 = [];
 
 const __vue_inject_styles__$9 = function (inject) {
   if (!inject) return;
-  inject("data-v-d24b77d0_0", {
-    source: ".vc-dialog-content-wrapper__button[data-v-d24b77d0]{font-family:inherit;font-size:100%;line-height:1.15;margin:0;text-transform:none;-webkit-appearance:button;background-color:transparent;background-image:none;padding:0;line-height:inherit;color:inherit;cursor:default;outline:0;position:fixed;width:100%;height:100%;top:0;left:0;right:0;bottom:0}.vc-dialog-content-wrapper__document[data-v-d24b77d0]{position:fixed;top:0;left:0;right:0;bottom:0;z-index:1050;touch-action:none}.vc-dialog-content-wrapper__content-holder[data-v-d24b77d0]{overflow:auto;position:absolute;height:fit-content;top:0;left:0;right:0;bottom:0}.fade-enter-active[data-v-d24b77d0],.fade-leave-active[data-v-d24b77d0]{transition:opacity ease-in-out .1s}.fade-enter[data-v-d24b77d0],.fade-leave-to[data-v-d24b77d0]{opacity:0}.scale-enter-active[data-v-d24b77d0],.scale-leave-active[data-v-d24b77d0]{transition:transform ease-out .1s}.scale-enter[data-v-d24b77d0],.scale-leave-to[data-v-d24b77d0]{transform:scale(0)}",
+  inject("data-v-5ef25b27_0", {
+    source: ".vc-dialog-content-wrapper__button[data-v-5ef25b27]{font-family:inherit;font-size:100%;line-height:1.15;margin:0;text-transform:none;-webkit-appearance:button;background-color:transparent;background-image:none;padding:0;line-height:inherit;color:inherit;cursor:default;outline:0;position:fixed;width:100%;height:100%;top:0;left:0;right:0;bottom:0}.vc-dialog-content-wrapper__document[data-v-5ef25b27]{position:fixed;top:0;left:0;right:0;bottom:0;z-index:1050;touch-action:none}.vc-dialog-content-wrapper__content-holder[data-v-5ef25b27]{overflow:auto;position:absolute;height:fit-content;top:0;left:0;right:0;bottom:0;touch-action:none}.fade-enter-active[data-v-5ef25b27],.fade-leave-active[data-v-5ef25b27]{transition:opacity ease-in-out .1s}.fade-enter[data-v-5ef25b27],.fade-leave-to[data-v-5ef25b27]{opacity:0}.scale-enter-active[data-v-5ef25b27],.scale-leave-active[data-v-5ef25b27]{transition:transform ease-out .1s}.scale-enter[data-v-5ef25b27],.scale-leave-to[data-v-5ef25b27]{transform:scale(0)}",
     map: undefined,
     media: undefined
   });
@@ -1318,7 +1318,7 @@ const __vue_inject_styles__$9 = function (inject) {
 /* scoped */
 
 
-const __vue_scope_id__$9 = "data-v-d24b77d0";
+const __vue_scope_id__$9 = "data-v-5ef25b27";
 /* module identifier */
 
 const __vue_module_identifier__$9 = undefined;
