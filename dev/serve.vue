@@ -71,7 +71,7 @@
                                                                 v-for="num in 10"
                                                                 :key="num"
                                                             >
-                                                                <vc-focusable
+                                                                <vc-option
                                                                     @click="
                                                                         toggle(
                                                                             false
@@ -79,7 +79,7 @@
                                                                     "
                                                                     v-text="num"
                                                                 >
-                                                                </vc-focusable>
+                                                                </vc-option>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -165,11 +165,11 @@
 
                                 <ul v-if="activated">
                                     <li v-for="num in 10" :key="num">
-                                        <vc-focusable
+                                        <vc-option
                                             @click="toggle(false)"
                                             v-text="num"
                                         >
-                                        </vc-focusable>
+                                        </vc-option>
                                     </li>
                                 </ul>
                             </div>
@@ -229,10 +229,8 @@
 <script>
 import Vue from 'vue'
 import axios from 'axios'
-import VcFocusable from '../src/lib-components/VcFocusable.vue'
 
 export default Vue.extend({
-    components: { VcFocusable },
     name: 'ServeDev',
     data() {
         return {

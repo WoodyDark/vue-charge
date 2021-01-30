@@ -11,6 +11,10 @@ If you're new to the concept of renderless components and want to learn more abo
 
 TLDR: Renderless components abstracts UI state management, so you never have to write `this.loading = true` or `this.showDialog = false` again. [See examples below.](#documentation)
 
+# Important Note
+
+This library is currently still in alpha. There is likely to be breaking change in updates.
+
 # Features
 
 -   No dependencies

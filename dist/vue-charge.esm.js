@@ -381,7 +381,7 @@ var script$3 = {
   data() {
     return {
       active: false,
-      focusables: [],
+      options: [],
       focusedChild: -1
     };
   },
@@ -395,15 +395,15 @@ var script$3 = {
   watch: {
     focusedChild(val) {
       const {
-        focusables
+        options
       } = this;
-      const index = this.indexOfFocusable(val);
+      const index = this.indexOfOption(val);
       if (index < 0) return;
-      focusables[index].$el.focus();
+      options[index].$el.focus();
     }
 
   },
-  methods: { ...createRegistrable('focusables', 'focusable'),
+  methods: { ...createRegistrable('options', 'option'),
 
     handleFocusout() {
       this.active = false;
@@ -413,12 +413,12 @@ var script$3 = {
     },
 
     registerFocus(uid) {
-      const index = this.indexOfFocusable(uid);
+      const index = this.indexOfOption(uid);
       this.focusedChild = uid;
     },
 
     registerBlur(uid) {
-      const index = this.indexOfFocusable(uid);
+      const index = this.indexOfOption(uid);
       if (this.focusedChild !== index) return;
       this.focusedChild = -1;
     },
@@ -426,25 +426,25 @@ var script$3 = {
     focusNext() {
       const {
         active,
-        focusables,
-        indexOfFocusable,
+        options,
+        indexOfOption,
         focusedChild
       } = this;
       if (!active) return;
-      const index = focusNext(focusables, indexOfFocusable(focusedChild));
-      this.focusedChild = index < 0 ? -1 : focusables[index]._uid;
+      const index = focusNext(options, indexOfOption(focusedChild));
+      this.focusedChild = index < 0 ? -1 : options[index]._uid;
     },
 
     focusPrev() {
       const {
         active,
-        focusables,
-        indexOfFocusable,
+        options,
+        indexOfOption,
         focusedChild
       } = this;
       if (!active) return;
-      const index = focusPrev(focusables, indexOfFocusable(focusedChild));
-      this.focusedChild = index < 0 ? -1 : focusables[index]._uid;
+      const index = focusPrev(options, indexOfOption(focusedChild));
+      this.focusedChild = index < 0 ? -1 : options[index]._uid;
     }
 
   }
@@ -513,7 +513,100 @@ const __vue_component__$3 = /*#__PURE__*/normalizeComponent({
   staticRenderFns: __vue_staticRenderFns__
 }, __vue_inject_styles__$3, __vue_script__$3, __vue_scope_id__$3, __vue_is_functional_template__$3, __vue_module_identifier__$3, false, undefined, undefined, undefined);
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var script$4 = {
+  name: 'VcOption',
+  props: {
+    tag: {
+      type: String,
+      default: 'button'
+    }
+  },
+  inject: ['vcMenu'],
+  methods: {
+    registerFocus() {
+      this.vcMenu.registerFocus(this._uid);
+    },
+
+    registerBlur() {
+      this.vcMenu.registerBlur(this._uid);
+    }
+
+  },
+
+  created() {
+    this.vcMenu.registerOption(this);
+  },
+
+  beforeDestroy() {
+    this.vcMenu.unregisterOption(this._uid);
+  },
+
+  render(h, {
+    props,
+    scopedSlots
+  }) {
+    h(props.tag, scopedSlots.default());
+  }
+
+};
+
+/* script */
+const __vue_script__$4 = script$4;
+/* template */
+
+var __vue_render__$1 = function () {
+  var _vm = this;
+
+  var _h = _vm.$createElement;
+
+  var _c = _vm._self._c || _h;
+
+  return _c(_vm.tag, _vm._g(_vm._b({
+    tag: "component",
+    on: {
+      "focus": _vm.registerFocus,
+      "blur": _vm.registerBlur
+    }
+  }, 'component', _vm.$attrs, false), _vm.$listeners), [_vm._t("default")], 2);
+};
+
+var __vue_staticRenderFns__$1 = [];
+/* style */
+
+const __vue_inject_styles__$4 = undefined;
+/* scoped */
+
+const __vue_scope_id__$4 = undefined;
+/* module identifier */
+
+const __vue_module_identifier__$4 = undefined;
+/* functional template */
+
+const __vue_is_functional_template__$4 = false;
+/* style inject */
+
+/* style inject SSR */
+
+/* style inject shadow dom */
+
+const __vue_component__$4 = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__$1,
+  staticRenderFns: __vue_staticRenderFns__$1
+}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);
+
+var script$5 = {
   name: 'VcToggle',
 
   data() {
@@ -547,28 +640,28 @@ var script$4 = {
 };
 
 /* script */
-const __vue_script__$4 = script$4;
+const __vue_script__$5 = script$5;
 /* template */
 
 /* style */
 
-const __vue_inject_styles__$4 = undefined;
+const __vue_inject_styles__$5 = undefined;
 /* scoped */
 
-const __vue_scope_id__$4 = undefined;
+const __vue_scope_id__$5 = undefined;
 /* module identifier */
 
-const __vue_module_identifier__$4 = undefined;
+const __vue_module_identifier__$5 = undefined;
 /* functional template */
 
-const __vue_is_functional_template__$4 = undefined;
+const __vue_is_functional_template__$5 = undefined;
 /* style inject */
 
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-const __vue_component__$4 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$4, __vue_script__$4, __vue_scope_id__$4, __vue_is_functional_template__$4, __vue_module_identifier__$4, false, undefined, undefined, undefined);
+const __vue_component__$5 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, undefined, undefined);
 
 const prependZero = num => ('0' + num).slice(-2);
 
@@ -629,7 +722,7 @@ const dateMeta = formattedDate => {
   };
 };
 
-var script$5 = {
+var script$6 = {
   name: 'VcDates',
   props: {
     wrap: {
@@ -734,28 +827,28 @@ var script$5 = {
 };
 
 /* script */
-const __vue_script__$5 = script$5;
+const __vue_script__$6 = script$6;
 /* template */
 
 /* style */
 
-const __vue_inject_styles__$5 = undefined;
+const __vue_inject_styles__$6 = undefined;
 /* scoped */
 
-const __vue_scope_id__$5 = undefined;
+const __vue_scope_id__$6 = undefined;
 /* module identifier */
 
-const __vue_module_identifier__$5 = undefined;
+const __vue_module_identifier__$6 = undefined;
 /* functional template */
 
-const __vue_is_functional_template__$5 = undefined;
+const __vue_is_functional_template__$6 = undefined;
 /* style inject */
 
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-const __vue_component__$5 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, undefined, undefined);
+const __vue_component__$6 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, false, undefined, undefined, undefined);
 
 const wdays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
@@ -773,7 +866,7 @@ wdays.forEach(day => {
     });
   };
 });
-var script$6 = {
+var script$7 = {
   name: 'VcWeekdays',
   props: {
     wrap: {
@@ -842,30 +935,30 @@ var script$6 = {
 };
 
 /* script */
-const __vue_script__$6 = script$6;
+const __vue_script__$7 = script$7;
 /* template */
 
 /* style */
 
-const __vue_inject_styles__$6 = undefined;
+const __vue_inject_styles__$7 = undefined;
 /* scoped */
 
-const __vue_scope_id__$6 = undefined;
+const __vue_scope_id__$7 = undefined;
 /* module identifier */
 
-const __vue_module_identifier__$6 = undefined;
+const __vue_module_identifier__$7 = undefined;
 /* functional template */
 
-const __vue_is_functional_template__$6 = undefined;
+const __vue_is_functional_template__$7 = undefined;
 /* style inject */
 
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-const __vue_component__$6 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$6, __vue_script__$6, __vue_scope_id__$6, __vue_is_functional_template__$6, __vue_module_identifier__$6, false, undefined, undefined, undefined);
+const __vue_component__$7 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$7, __vue_script__$7, __vue_scope_id__$7, __vue_is_functional_template__$7, __vue_module_identifier__$7, false, undefined, undefined, undefined);
 
-var script$7 = {
+var script$8 = {
   name: 'VcValidatable',
   inject: ['vcForm'],
   props: {
@@ -956,31 +1049,31 @@ var script$7 = {
 };
 
 /* script */
-const __vue_script__$7 = script$7;
+const __vue_script__$8 = script$8;
 /* template */
 
 /* style */
 
-const __vue_inject_styles__$7 = undefined;
+const __vue_inject_styles__$8 = undefined;
 /* scoped */
 
-const __vue_scope_id__$7 = undefined;
+const __vue_scope_id__$8 = undefined;
 /* module identifier */
 
-const __vue_module_identifier__$7 = undefined;
+const __vue_module_identifier__$8 = undefined;
 /* functional template */
 
-const __vue_is_functional_template__$7 = undefined;
+const __vue_is_functional_template__$8 = undefined;
 /* style inject */
 
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-const __vue_component__$7 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$7, __vue_script__$7, __vue_scope_id__$7, __vue_is_functional_template__$7, __vue_module_identifier__$7, false, undefined, undefined, undefined);
+const __vue_component__$8 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$8, __vue_script__$8, __vue_scope_id__$8, __vue_is_functional_template__$8, __vue_module_identifier__$8, false, undefined, undefined, undefined);
 
 //
-var script$8 = {
+var script$9 = {
   name: 'VcForm',
 
   data() {
@@ -1023,10 +1116,10 @@ var script$8 = {
 };
 
 /* script */
-const __vue_script__$8 = script$8;
+const __vue_script__$9 = script$9;
 /* template */
 
-var __vue_render__$1 = function () {
+var __vue_render__$2 = function () {
   var _vm = this;
 
   var _h = _vm.$createElement;
@@ -1040,29 +1133,29 @@ var __vue_render__$1 = function () {
   })], 2);
 };
 
-var __vue_staticRenderFns__$1 = [];
+var __vue_staticRenderFns__$2 = [];
 /* style */
 
-const __vue_inject_styles__$8 = undefined;
+const __vue_inject_styles__$9 = undefined;
 /* scoped */
 
-const __vue_scope_id__$8 = undefined;
+const __vue_scope_id__$9 = undefined;
 /* module identifier */
 
-const __vue_module_identifier__$8 = undefined;
+const __vue_module_identifier__$9 = undefined;
 /* functional template */
 
-const __vue_is_functional_template__$8 = false;
+const __vue_is_functional_template__$9 = false;
 /* style inject */
 
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-const __vue_component__$8 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$1,
-  staticRenderFns: __vue_staticRenderFns__$1
-}, __vue_inject_styles__$8, __vue_script__$8, __vue_scope_id__$8, __vue_is_functional_template__$8, __vue_module_identifier__$8, false, undefined, undefined, undefined);
+const __vue_component__$9 = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__$2,
+  staticRenderFns: __vue_staticRenderFns__$2
+}, __vue_inject_styles__$9, __vue_script__$9, __vue_scope_id__$9, __vue_is_functional_template__$9, __vue_module_identifier__$9, false, undefined, undefined, undefined);
 
 //
 //
@@ -1096,7 +1189,7 @@ const __vue_component__$8 = /*#__PURE__*/normalizeComponent({
 //
 //
 //
-var script$9 = {
+var script$a = {
   name: 'VcDialogContentWrapper',
   props: {
     value: {
@@ -1248,10 +1341,10 @@ function addStyle(id, css) {
 }
 
 /* script */
-const __vue_script__$9 = script$9;
+const __vue_script__$a = script$a;
 /* template */
 
-var __vue_render__$2 = function () {
+var __vue_render__$3 = function () {
   var _vm = this;
 
   var _h = _vm.$createElement;
@@ -1304,10 +1397,10 @@ var __vue_render__$2 = function () {
   }, [_vm._t("default")], 2) : _vm._e()])], 1) : _vm._e()]);
 };
 
-var __vue_staticRenderFns__$2 = [];
+var __vue_staticRenderFns__$3 = [];
 /* style */
 
-const __vue_inject_styles__$9 = function (inject) {
+const __vue_inject_styles__$a = function (inject) {
   if (!inject) return;
   inject("data-v-5ef25b27_0", {
     source: ".vc-dialog-content-wrapper__button[data-v-5ef25b27]{font-family:inherit;font-size:100%;line-height:1.15;margin:0;text-transform:none;-webkit-appearance:button;background-color:transparent;background-image:none;padding:0;line-height:inherit;color:inherit;cursor:default;outline:0;position:fixed;width:100%;height:100%;top:0;left:0;right:0;bottom:0}.vc-dialog-content-wrapper__document[data-v-5ef25b27]{position:fixed;top:0;left:0;right:0;bottom:0;z-index:1050;touch-action:none}.vc-dialog-content-wrapper__content-holder[data-v-5ef25b27]{overflow:auto;position:absolute;height:fit-content;top:0;left:0;right:0;bottom:0;touch-action:none}.fade-enter-active[data-v-5ef25b27],.fade-leave-active[data-v-5ef25b27]{transition:opacity ease-in-out .1s}.fade-enter[data-v-5ef25b27],.fade-leave-to[data-v-5ef25b27]{opacity:0}.scale-enter-active[data-v-5ef25b27],.scale-leave-active[data-v-5ef25b27]{transition:transform ease-out .1s}.scale-enter[data-v-5ef25b27],.scale-leave-to[data-v-5ef25b27]{transform:scale(0)}",
@@ -1318,27 +1411,27 @@ const __vue_inject_styles__$9 = function (inject) {
 /* scoped */
 
 
-const __vue_scope_id__$9 = "data-v-5ef25b27";
+const __vue_scope_id__$a = "data-v-5ef25b27";
 /* module identifier */
 
-const __vue_module_identifier__$9 = undefined;
+const __vue_module_identifier__$a = undefined;
 /* functional template */
 
-const __vue_is_functional_template__$9 = false;
+const __vue_is_functional_template__$a = false;
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-const __vue_component__$9 = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$2,
-  staticRenderFns: __vue_staticRenderFns__$2
-}, __vue_inject_styles__$9, __vue_script__$9, __vue_scope_id__$9, __vue_is_functional_template__$9, __vue_module_identifier__$9, false, createInjector, undefined, undefined);
+const __vue_component__$a = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__$3,
+  staticRenderFns: __vue_staticRenderFns__$3
+}, __vue_inject_styles__$a, __vue_script__$a, __vue_scope_id__$a, __vue_is_functional_template__$a, __vue_module_identifier__$a, false, createInjector, undefined, undefined);
 
-var script$a = {
+var script$b = {
   name: 'VcDialogRenderer',
   functional: true,
   components: {
-    VcDialogContentWrapper: __vue_component__$9
+    VcDialogContentWrapper: __vue_component__$a
   },
   props: {
     dialogs: {
@@ -1350,7 +1443,7 @@ var script$a = {
   render(h, {
     props
   }) {
-    return props.dialogs.map(dialog => h(__vue_component__$9, {
+    return props.dialogs.map(dialog => h(__vue_component__$a, {
       attrs: {
         id: `vc-dialog-${dialog._uid}`
       },
@@ -1380,28 +1473,28 @@ var script$a = {
 };
 
 /* script */
-const __vue_script__$a = script$a;
+const __vue_script__$b = script$b;
 /* template */
 
 /* style */
 
-const __vue_inject_styles__$a = undefined;
+const __vue_inject_styles__$b = undefined;
 /* scoped */
 
-const __vue_scope_id__$a = undefined;
+const __vue_scope_id__$b = undefined;
 /* module identifier */
 
-const __vue_module_identifier__$a = undefined;
+const __vue_module_identifier__$b = undefined;
 /* functional template */
 
-const __vue_is_functional_template__$a = undefined;
+const __vue_is_functional_template__$b = undefined;
 /* style inject */
 
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-const __vue_component__$a = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$a, __vue_script__$a, __vue_scope_id__$a, __vue_is_functional_template__$a, __vue_module_identifier__$a, false, undefined, undefined, undefined);
+const __vue_component__$b = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$b, __vue_script__$b, __vue_scope_id__$b, __vue_is_functional_template__$b, __vue_module_identifier__$b, false, undefined, undefined, undefined);
 
 //
 
@@ -1409,10 +1502,10 @@ function getFocusables(el) {
   return [...el.querySelectorAll('button, [href], input, select, textarea, [tabindex]')].filter(el => el.getAttribute('tabindex') !== '-1');
 }
 
-var script$b = {
+var script$c = {
   name: 'VcApp',
   components: {
-    VcDialogRenderer: __vue_component__$a
+    VcDialogRenderer: __vue_component__$b
   },
 
   provide() {
@@ -1511,10 +1604,10 @@ var script$b = {
 };
 
 /* script */
-const __vue_script__$b = script$b;
+const __vue_script__$c = script$c;
 /* template */
 
-var __vue_render__$3 = function () {
+var __vue_render__$4 = function () {
   var _vm = this;
 
   var _h = _vm.$createElement;
@@ -1530,31 +1623,31 @@ var __vue_render__$3 = function () {
   })], 2);
 };
 
-var __vue_staticRenderFns__$3 = [];
+var __vue_staticRenderFns__$4 = [];
 /* style */
 
-const __vue_inject_styles__$b = undefined;
+const __vue_inject_styles__$c = undefined;
 /* scoped */
 
-const __vue_scope_id__$b = undefined;
+const __vue_scope_id__$c = undefined;
 /* module identifier */
 
-const __vue_module_identifier__$b = undefined;
+const __vue_module_identifier__$c = undefined;
 /* functional template */
 
-const __vue_is_functional_template__$b = false;
+const __vue_is_functional_template__$c = false;
 /* style inject */
 
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-const __vue_component__$b = /*#__PURE__*/normalizeComponent({
-  render: __vue_render__$3,
-  staticRenderFns: __vue_staticRenderFns__$3
-}, __vue_inject_styles__$b, __vue_script__$b, __vue_scope_id__$b, __vue_is_functional_template__$b, __vue_module_identifier__$b, false, undefined, undefined, undefined);
+const __vue_component__$c = /*#__PURE__*/normalizeComponent({
+  render: __vue_render__$4,
+  staticRenderFns: __vue_staticRenderFns__$4
+}, __vue_inject_styles__$c, __vue_script__$c, __vue_scope_id__$c, __vue_is_functional_template__$c, __vue_module_identifier__$c, false, undefined, undefined, undefined);
 
-var script$c = {
+var script$d = {
   name: 'VcDialog',
   inject: ['vcApp'],
   props: {
@@ -1635,28 +1728,28 @@ var script$c = {
 };
 
 /* script */
-const __vue_script__$c = script$c;
+const __vue_script__$d = script$d;
 /* template */
 
 /* style */
 
-const __vue_inject_styles__$c = undefined;
+const __vue_inject_styles__$d = undefined;
 /* scoped */
 
-const __vue_scope_id__$c = undefined;
+const __vue_scope_id__$d = undefined;
 /* module identifier */
 
-const __vue_module_identifier__$c = undefined;
+const __vue_module_identifier__$d = undefined;
 /* functional template */
 
-const __vue_is_functional_template__$c = undefined;
+const __vue_is_functional_template__$d = undefined;
 /* style inject */
 
 /* style inject SSR */
 
 /* style inject shadow dom */
 
-const __vue_component__$c = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$c, __vue_script__$c, __vue_scope_id__$c, __vue_is_functional_template__$c, __vue_module_identifier__$c, false, undefined, undefined, undefined);
+const __vue_component__$d = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$d, __vue_script__$d, __vue_scope_id__$d, __vue_is_functional_template__$d, __vue_module_identifier__$d, false, undefined, undefined, undefined);
 
 /* eslint-disable import/prefer-default-export */
 
@@ -1666,13 +1759,14 @@ var components = /*#__PURE__*/Object.freeze({
     VcMultiScreen: __vue_component__$1,
     VcResetable: __vue_component__$2,
     VcMenu: __vue_component__$3,
-    VcToggle: __vue_component__$4,
-    VcDates: __vue_component__$5,
-    VcWeekdays: __vue_component__$6,
-    VcValidatable: __vue_component__$7,
-    VcForm: __vue_component__$8,
-    VcApp: __vue_component__$b,
-    VcDialog: __vue_component__$c
+    VcOption: __vue_component__$4,
+    VcToggle: __vue_component__$5,
+    VcDates: __vue_component__$6,
+    VcWeekdays: __vue_component__$7,
+    VcValidatable: __vue_component__$8,
+    VcForm: __vue_component__$9,
+    VcApp: __vue_component__$c,
+    VcDialog: __vue_component__$d
 });
 
 // Import vue components
@@ -1708,4 +1802,4 @@ const plugin = {
 }; // To auto-install on non-es builds, when vue is found
 
 export default plugin;
-export { __vue_component__$b as VcApp, __vue_component__ as VcAsync, __vue_component__$5 as VcDates, __vue_component__$c as VcDialog, __vue_component__$8 as VcForm, __vue_component__$3 as VcMenu, __vue_component__$1 as VcMultiScreen, __vue_component__$2 as VcResetable, __vue_component__$4 as VcToggle, __vue_component__$7 as VcValidatable, __vue_component__$6 as VcWeekdays };
+export { __vue_component__$c as VcApp, __vue_component__ as VcAsync, __vue_component__$6 as VcDates, __vue_component__$d as VcDialog, __vue_component__$9 as VcForm, __vue_component__$3 as VcMenu, __vue_component__$1 as VcMultiScreen, __vue_component__$4 as VcOption, __vue_component__$2 as VcResetable, __vue_component__$5 as VcToggle, __vue_component__$8 as VcValidatable, __vue_component__$7 as VcWeekdays };
