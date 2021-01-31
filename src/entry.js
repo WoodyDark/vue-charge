@@ -1,5 +1,7 @@
 // Import vue components
 import * as components from '@/lib-components/index'
+import formatDate from '@/utils/FormatDate'
+import prependZero from '@/utils/PrependZero'
 
 // install function executed by Vue.use()
 const install = function installVueCharge(Vue) {
@@ -20,6 +22,8 @@ const install = function installVueCharge(Vue) {
         log() {
             console.log(...arguments)
         },
+        formatDate,
+        prependZero,
         goldenRatio: 1.618
     }
     Object.entries(components).forEach(([componentName, component]) => {
