@@ -663,7 +663,7 @@ const __vue_is_functional_template__$5 = undefined;
 
 const __vue_component__$5 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, undefined, undefined);
 
-const prependZero = num => ('0' + num).slice(-2);
+const prependZero = (num, digitCount = 2) => ('0'.repeat(digitCount - 1) + num).slice(digitCount * -1);
 
 function serializeMonthDates(dateString) {
   const splitDate = dateString.split('-');
@@ -1789,6 +1789,8 @@ const install = function installVueCharge(Vue) {
       console.log(...arguments);
     },
 
+    formatDate,
+    prependZero,
     goldenRatio: 1.618
   };
   Object.entries(components).forEach(([componentName, component]) => {

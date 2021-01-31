@@ -706,7 +706,8 @@ var __vue_is_functional_template__$5 = undefined;
 /* style inject shadow dom */
 
 var __vue_component__$5 = /*#__PURE__*/normalizeComponent({}, __vue_inject_styles__$5, __vue_script__$5, __vue_scope_id__$5, __vue_is_functional_template__$5, __vue_module_identifier__$5, false, undefined, undefined, undefined);var prependZero = function prependZero(num) {
-  return ('0' + num).slice(-2);
+  var digitCount = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+  return ('0'.repeat(digitCount - 1) + num).slice(digitCount * -1);
 };function serializeMonthDates(dateString) {
   var splitDate = dateString.split('-');
   var year = splitDate[0];
@@ -1722,6 +1723,8 @@ var __vue_component__$d = /*#__PURE__*/normalizeComponent({}, __vue_inject_style
 
       (_console = console).log.apply(_console, arguments);
     },
+    formatDate: formatDate,
+    prependZero: prependZero,
     goldenRatio: 1.618
   };
   Object.entries(components).forEach(function (_ref) {
